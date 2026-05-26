@@ -240,12 +240,36 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    btnToggleTheme.addEventListener('click', () => {
+    // Procura diretamente a linha de configuração (div pai) no seu HTML
+const linhaTema = document.querySelector('.setting-row');
+
+if (linhaTema) {
+    linhaTema.addEventListener('click', () => {
+        // 1. Inverte o estado do tema
         isDarkMode = !isDarkMode;
+        
+        // 2. Atualiza a interface normal do app
         updateThemeUI();
         saveToLocalStorage();
         drawChartStatic();
+
+        // 3. Aplica o efeito de piscar baseado no novo modo
+        if (isDarkMode) {
+            linhaTema.classList.add('efeito-piscar-escuro');
+            // Remove a classe após 400ms (tempo da animação) para poder piscar de novo no futuro
+            setTimeout(() => {
+                linhaTema.classList.remove('efeito-piscar-escuro');
+            }, 400);
+        } else {
+            linhaTema.classList.add('efeito-piscar-claro');
+            setTimeout(() => {
+                linhaTema.classList.remove('efeito-piscar-claro');
+            }, 400);
+        }
     });
+}
+
+
 
     appLanguageSelect.addEventListener('change', (e) => {
         currentLang = e.target.value;
@@ -478,18 +502,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function gerarLegendas() {
-        legendPanel.innerHTML = '';
-        config.forEach(task => {
-            const item = document.createElement('div');
-            item.className = 'legend-item';
-            item.innerHTML = `
-                <div class="legend-color-dot" style="background-color: ${task.color}"></div>
-                <span class="legend-text">${task.defaultName}</span>
-                <span class="legend-hours">${formatTime(task.minutes)}</span>
-            `;
-            legendPanel.appendChild(item);
-        });
-    }
+    legendPanel.innerHTML = '';
+    
+    // Organiza a ordem exata das bolinhas: 
+    // 1º Atividades criadas (dinâmicas), 2º Dormir, 3º Outros
+    const listaOrdenada = [...config].sort((a, b) => {
+        // Se for o "Outros" (isStatic), joga para o fim do fim (maior peso)
+        if (a.isStatic) return 1;
+        if (b.isStatic) return -1;
+        
+        // Se for o "Dormir" (isSleep), joga para baixo das dinâmicas, mas antes do "Outros"
+        if (a.isSleep) return 1; 
+        if (b.isSleep) return -1;
+        
+        return 0; // Mantém a ordem entre as atividades dinâmicas
+    });
+
+    listaOrdenada.forEach(task => {
+        const item = document.createElement('div');
+        item.className = 'legend-item';
+        item.innerHTML = `
+            <div class="legend-color-dot" style="background-color: ${task.color}"></div>
+            <span class="legend-text">${task.defaultName}</span>
+            <span class="legend-hours">${formatTime(task.minutes)}</span>
+        `;
+        legendPanel.appendChild(item);
+    });
+}
+
+
 
     document.getElementById('btnAddTaskHours').addEventListener('click', () => {
         let totalSemOutros = 0;
