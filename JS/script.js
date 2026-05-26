@@ -1,78 +1,64 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // 1. DICIONÁRIO DE TRADUÇÃO
+    // MAPA LOCAL DE ÍCONES (Pasta img/icons/)
+    const iconPaths = {
+        delete: "./img/icons/delete.svg", 
+        settings: "./img/icons/settings.svg",
+        close: "./img/icons/close.svg",
+        darkMode: "./img/icons/dark_mode.svg",
+        lightMode: "./img/icons/light_mode.svg",
+        edit: "./img/icons/edit.svg",
+        add: "./img/icons/add.svg",
+        home: "./img/icons/home.svg",
+        checkBox: "./img/icons/check_box.svg"
+    };
+
+    // DICIONÁRIO DE TRADUÇÃO
     const translations = {
         pt: {
-            appTitle: "Dia Visual",
-            editTitle: "Editar Atividades",
-            settingsTitle: "Configurações",
-            appearance: "Aparência",
-            darkMode: "Modo Escuro",
-            lightMode: "Modo Claro",
-            addTask: "+ Adicionar Tarefa",
-            total: "Total",
-            automatic: "Automático",
-            errorOver: "Passou de 24h",
-            staticTaskName: "Outros",
-            sleepTaskName: "Dormir",
-            todoTitle: "Tarefas To-Do",
-            navInicio: "Início",
-            navTodos: "To-Dos"
+            appTitle: "Dia Visual", editTitle: "Editar Atividades", settingsTitle: "Configurações",
+            appearance: "Aparência", languageSection: "Idioma / Language", darkMode: "Modo Escuro",
+            lightMode: "Modo Claro", addTask: "+ Adicionar Tarefa", total: "Total",
+            automatic: "Automático", errorOver: "Passou de 24h", staticTaskName: "Outros",
+            sleepTaskName: "Dormir", todoTitle: "Tarefas", navInicio: "Início", navTodos: "To-Dos"
         },
         en: {
-            appTitle: "Visual Day",
-            editTitle: "Edit Activities",
-            settingsTitle: "Settings",
-            appearance: "Appearance",
-            darkMode: "Dark Mode",
-            lightMode: "Light Mode",
-            addTask: "+ Add Task",
-            total: "Total",
-            automatic: "Automatic",
-            errorOver: "Over 24h",
-            staticTaskName: "Others",
-            sleepTaskName: "Sleep",
-            todoTitle: "To-Do Tasks",
-            navInicio: "Home",
-            navTodos: "To-Dos"
+            appTitle: "Visual Day", editTitle: "Edit Activities", settingsTitle: "Settings",
+            appearance: "Appearance", languageSection: "Language / Language", darkMode: "Dark Mode",
+            lightMode: "Light Mode", addTask: "+ Add Task", total: "Total",
+            automatic: "Automatic", errorOver: "Over 24h", staticTaskName: "Others",
+            sleepTaskName: "Sleep", todoTitle: "Tasks", navInicio: "Home", navTodos: "To-Dos"
         },
         es: {
-            appTitle: "Día Visual",
-            editTitle: "Editar Actividades",
-            settingsTitle: "Configuraciones",
-            appearance: "Apariencia",
-            darkMode: "Modo Oscuro",
-            lightMode: "Modo Claro",
-            addTask: "+ Añadir Tarea",
-            total: "Total",
-            automatic: "Automático",
-            errorOver: "Pasó de 24h",
-            staticTaskName: "Otros",
-            sleepTaskName: "Dormir",
-            todoTitle: "Tareas To-Do",
-            navInicio: "Inicio",
-            navTodos: "To-Dos"
+            appTitle: "Día Visual", editTitle: "Editar Actividades", settingsTitle: "Configuraciones",
+            appearance: "Apariencia", languageSection: "Idioma / Language", darkMode: "Modo Oscuro",
+            lightMode: "Modo Claro", addTask: "+ Añadir Tarea", total: "Total",
+            automatic: "Automático", errorOver: "Pasó de 24h", staticTaskName: "Otros",
+            sleepTaskName: "Dormir", todoTitle: "Tareas", navInicio: "Inicio", navTodos: "To-Dos"
         },
         zh: {
-            appTitle: "视觉的一天",
-            editTitle: "编辑任务",
-            settingsTitle: "设置",
-            appearance: "外貌",
-            darkMode: "深色模式",
-            lightMode: "浅色模式",
-            addTask: "+ 添加任务",
-            total: "总计",
-            automatic: "自动",
-            errorOver: "超过 24h",
-            staticTaskName: "其他",
-            sleepTaskName: "睡眠",
-            todoTitle: "待办事项",
-            navInicio: "首页",
-            navTodos: "待办"
+            appTitle: "视觉的一天", editTitle: "编辑任务", settingsTitle: "设置",
+            appearance: "外貌", languageSection: "语言 / Language", darkMode: "深色模式",
+            lightMode: "浅色模式", addTask: "+ 添加任务", total: "总计",
+            automatic: "自动", errorOver: "超过 24h", staticTaskName: "其他",
+            sleepTaskName: "睡眠", todoTitle: "任务", navInicio: "首页", navTodos: "待办"
+        },
+        ja: {
+            appTitle: "ビジュアルデイ", editTitle: "アクティビティ編集", settingsTitle: "設定",
+            appearance: "外観", languageSection: "言語 / Language", darkMode: "ダークモード",
+            lightMode: "ライトモード", addTask: "+ タスクを追加", total: "合計",
+            automatic: "自動", errorOver: "24時間を超えています", staticTaskName: "その他",
+            sleepTaskName: "睡眠", todoTitle: "タスク", navInicio: "ホーム", navTodos: "To-Do"
+        },
+        ko: {
+            appTitle: "비주얼 데이", editTitle: "활동 편집", settingsTitle: "설정",
+            appearance: "화면 설정", languageSection: "언어 / Language", darkMode: "다크 모드",
+            lightMode: "라이트 모드", addTask: "+ 작업 추가", total: "총합",
+            automatic: "자동", errorOver: "24시간 초과", staticTaskName: "기타",
+            sleepTaskName: "수면", todoTitle: "작업", navInicio: "홈", navTodos: "할 일"
         }
     };
 
-    // Configuração Inicial - "Dormir" posicionado em cima de "Outros", azul escuro (#1a365d) e iniciando em 8h
     const DEFAULT_CONFIG = [
         { id: 2, color: '#36A2EB', defaultName: 'Trabalho', hours: 6, isStatic: false },
         { id: 3, color: '#FFCE56', defaultName: 'Estudo', hours: 2, isStatic: false },
@@ -82,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { id: 6, color: '#bdc3c7', defaultName: 'Outros', hours: 4, isStatic: true }
     ];
 
-    // Limpeza forçada automática caso o navegador guarde cache incompatível da versão anterior
     if (localStorage.getItem('app_tasks_data')) {
         const checkData = JSON.parse(localStorage.getItem('app_tasks_data'));
         const sleepItem = checkData.find(t => t.isSleep);
@@ -117,9 +102,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnToggleTheme = document.getElementById('btnToggleTheme');
     const themeIcon = document.getElementById('themeIcon');
     const themeLabel = document.getElementById('themeLabel');
-    const langRadios = document.querySelectorAll('input[name="appLanguage"]');
+    const appLanguageSelect = document.getElementById('appLanguageSelect');
 
-    // Elementos To-Do
     const pageInicio = document.getElementById('pageInicio');
     const pageTodos = document.getElementById('pageTodos');
     const navBtnInicio = document.getElementById('navBtnInicio');
@@ -171,8 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
             div.innerHTML = `
                 <input type="checkbox" ${item.completed ? 'checked' : ''} id="check-${item.id}">
                 <input type="text" value="${item.text}" placeholder="..." id="text-${item.id}">
-                <button class="btn-delete-todo" id="del-${item.id}">
-                    <span class="material-icons">delete</span>
+                <button class="btn-delete-todo" id="del-${item.id}" type="button">
+                    <img src="${iconPaths.delete}" alt="Deletar" class="app-icon icon-delete-fix">
                 </button>
             `;
             todoListPanel.appendChild(div);
@@ -204,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('txtEditTitle').textContent = t.editTitle;
         document.getElementById('txtSettingsTitle').textContent = t.settingsTitle;
         document.getElementById('txtSectionAppearance').textContent = t.appearance;
+        document.getElementById('txtSectionLanguage').textContent = t.languageSection;
         document.getElementById('btnAddTaskHours').textContent = t.addTask;
         
         txtTodoTitle.textContent = t.todoTitle;
@@ -216,9 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const sleepTask = config.find(item => item.isSleep);
         if (sleepTask) sleepTask.defaultName = t.sleepTaskName;
         
-        langRadios.forEach(radio => {
-            radio.checked = (radio.value === currentLang);
-        });
+        appLanguageSelect.value = currentLang;
 
         updateThemeUI();
         renderizarLinhasEditor();
@@ -229,13 +212,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateThemeUI() {
         const t = translations[currentLang];
+        if (!themeIcon) return;
+
         if (isDarkMode) {
             document.body.classList.add('dark-mode');
-            themeIcon.textContent = "light_mode";
+            themeIcon.src = iconPaths.lightMode; // Troca a imagem para o Sol
             themeLabel.textContent = t.lightMode;
         } else {
             document.body.classList.remove('dark-mode');
-            themeIcon.textContent = "dark_mode";
+            themeIcon.src = iconPaths.darkMode;  // Troca a imagem para a Lua
             themeLabel.textContent = t.darkMode;
         }
     }
@@ -247,12 +232,10 @@ document.addEventListener("DOMContentLoaded", () => {
         drawChartStatic();
     });
 
-    langRadios.forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            currentLang = e.target.value;
-            saveToLocalStorage();
-            applyLanguage();
-        });
+    appLanguageSelect.addEventListener('change', (e) => {
+        currentLang = e.target.value;
+        saveToLocalStorage();
+        applyLanguage();
     });
 
     function renderizarLinhasEditor() {
@@ -265,7 +248,6 @@ document.addEventListener("DOMContentLoaded", () => {
             row.style.borderLeftColor = task.color;
 
             if (task.isStatic) {
-                // Outros (Calculado de forma automática no final)
                 row.innerHTML = `
                     <input type="text" id="name-${task.id}" value="${task.defaultName}" style="color: ${task.color};" readonly>
                     <div class="range-container" style="justify-content: flex-end;">
@@ -275,7 +257,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div style="width:32px; height:32px;"></div>
                 `;
             } else if (task.isSleep) {
-                // Dormir: Nome travado (readonly) e sem lixeira, mas possui o INPUT RANGE habilitado!
                 row.innerHTML = `
                     <input type="text" id="name-${task.id}" value="${task.defaultName}" style="color: ${task.color};" readonly>
                     <div class="range-container">
@@ -285,15 +266,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div style="width:32px; height:32px;"></div>
                 `;
             } else {
-                // Tarefas dinâmicas comuns
                 row.innerHTML = `
                     <input type="text" id="name-${task.id}" value="${task.defaultName}" style="color: ${task.color};">
                     <div class="range-container">
                         <input type="range" id="hours-${task.id}" value="${task.hours}" min="0" max="24" step="0.5">
                         <span class="hour-display" id="display-${task.id}">${task.hours.toFixed(1)}h</span>
                     </div>
-                    <button class="btn-delete-task" data-id="${task.id}" title="Excluir">
-                        <span class="material-icons">delete</span>
+                    <button class="btn-delete-task" data-id="${task.id}" title="Excluir" type="button">
+                        <img src="${iconPaths.delete}" alt="Excluir" class="app-icon icon-delete-fix">
                     </button>
                 `;
             }
@@ -397,11 +377,19 @@ document.addEventListener("DOMContentLoaded", () => {
         inputsPanel.scrollTo({ top: inputsPanel.scrollHeight, behavior: 'smooth' });
     });
 
-    // Foco do Modal com Âncora Dinâmica
+    // Abrir modal de Edição
     btnOpenEdit.addEventListener('click', () => {
         modalEdit.classList.add('active');
         sheetContent.style.transform = "translateY(0)";
         document.getElementById('mainContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Fechar modal de Edição clicando fora da folha
+    modalEdit.addEventListener('click', (e) => {
+        if (e.target === modalEdit) {
+            sheetContent.style.transform = "translateY(100%)";
+            setTimeout(() => modalEdit.classList.remove('active'), 250);
+        }
     });
 
     btnOpenSettings.addEventListener('click', (e) => {
@@ -417,32 +405,47 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.target === modalSettings) modalSettings.classList.remove('active');
     });
 
-    // Mecânica do Arrasto da Folha
+    // Arrasto do Bottom Sheet
     let startY = 0, currentY = 0, isDragging = false;
+    
     dragArea.addEventListener('mousedown', iniciarArrasto);
-    window.addEventListener('mousemove', movendoArrasto);
+    window.addEventListener('mousemove', movendoArrasto, { passive: false });
     window.addEventListener('mouseup', finalizarArrasto);
-    dragArea.addEventListener('touchstart', iniciarArrasto);
-    window.addEventListener('touchmove', movendoArrasto);
+    
+    dragArea.addEventListener('touchstart', iniciarArrasto, { passive: true });
+    window.addEventListener('touchmove', movendoArrasto, { passive: false });
     window.addEventListener('touchend', finalizarArrasto);
 
     function iniciarArrasto(e) {
         startY = e.touches ? e.touches[0].clientY : e.clientY;
+        currentY = startY;
         isDragging = true;
+        sheetContent.style.transition = "none";
     }
+    
     function movendoArrasto(e) {
         if (!isDragging) return;
         currentY = e.touches ? e.touches[0].clientY : e.clientY;
         let deltaY = currentY - startY;
-        if (deltaY > 0) sheetContent.style.transform = `translateY(${deltaY}px)`;
+        
+        if (deltaY > 0) {
+            e.preventDefault();
+            sheetContent.style.transform = `translateY(${deltaY}px)`;
+        } else {
+            sheetContent.style.transform = `translateY(0px)`;
+        }
     }
+    
     function finalizarArrasto() {
         if (!isDragging) return;
         isDragging = false;
+        
+        sheetContent.style.transition = "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)";
+        
         let deltaY = currentY - startY;
-        if (deltaY > 50) {
+        if (deltaY > 100) {
             sheetContent.style.transform = "translateY(100%)";
-            setTimeout(() => modalEdit.classList.remove('active'), 200);
+            setTimeout(() => modalEdit.classList.remove('active'), 250);
         } else {
             sheetContent.style.transform = "translateY(0)";
         }
@@ -518,7 +521,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // MOTOR DE ANIMAÇÃO DO GRÁFICO
     function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 
     function animacaoGrafico() {
