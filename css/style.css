@@ -499,29 +499,48 @@ canvas {
     gap: 10px;
     margin-left: auto; /* Garante alinhamento total na extrema direita */
 }
+/* 1. ESTADO NORMAL DO BOTÃO (Formato padrão: quadrado com cantos levemente mudados) */
+html body .bottom-sheet-content .btn-step,
+html body .btn-step,
 .btn-step {
-    width: 38px;
-    height: 36px;
-    border-radius: 6px;
-    border: none;
-    background-color: #4a5568;
-    color: white;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s ease;
+    width: 38px !important;
+    height: 36px !important;
+    border: none !important;
+    color: white !important;
+    font-size: 1.2rem !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    
+    /* Mantém o botão na frente e clicável */
+    position: relative !important;
+    z-index: 999 !important;
+    pointer-events: auto !important; 
+    
+    /* Cor padrão cinza fixa */
+    background-color: #4a5568 !important; 
+    
+    /* Começa com cantos pouco arredondados (6px) */
+    border-radius: 6px !important;
+    
+    /* Transição suave para o efeito de transformação acontecer */
+    transition: border-radius 0.15s ease-in-out !important;
+    -webkit-tap-highlight-color: transparent !important;
 }
 
-/* EFEITO HOVER E ACTIVE PEDIDO QUE ESCURECE O BOTÃO DE AJUSTE */
-.btn-step:hover {
-    background-color: #2d3748; 
-}
+/* 2. O QUE VOCÊ PEDIU: Mudar apenas o border-radius ao apertar (Active) */
+html body .bottom-sheet-content .btn-step:active,
+html body .btn-step:active,
 .btn-step:active { 
-    background-color: #1a202c; 
+    /* Vira uma bolinha perfeita (ou pílula) enquanto você estiver segurando */
+    border-radius: 100px !important; 
+    
+    /* Resposta instantânea ao toque */
+    transition: border-radius 0s !important;
 }
+
 
 .task-row input[type="text"] { flex: 1; min-width: 80px; padding: 5px 0; border: none; background: transparent; outline: none; font-size: 0.95rem; font-weight: bold; color: #fff; }
 .task-row input[readonly] { cursor: default; user-select: none; }
@@ -529,13 +548,13 @@ canvas {
 .task-row .range-container { display: flex; align-items: center; gap: 8px; flex: 1.8; min-width: 130px; }
 
 .read-only-range {
-    width: 55px; 
+    width: 50%; 
     flex: none;
     pointer-events: none; 
     -webkit-appearance: none;
     appearance: none;
-    height: 6px;
-    border-radius: 3px;
+    height: 20px;
+    border-radius: 100px;
 }
 .read-only-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 0; height: 0; }
 .read-only-range::-moz-range-thumb { width: 0; height: 0; border: 0; }
@@ -599,7 +618,43 @@ body.dark-mode .side-panel-header { border-color: #444; }
 .btn-close-side { background: transparent; border: none; color: inherit; cursor: pointer; }
 .settings-panel { display: flex; flex-direction: column; gap: 25px; }
 .setting-section h3 { font-size: 0.9rem; color: #7f8c8d; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px; }
-.setting-row { display: flex; align-items: center; gap: 15px; }
+.setting-row.clickable-theme-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 6px 0px;
+    cursor: pointer;
+    width: 100%;
+    padding: 4px;
+    border-radius: 3px;
+    -webkit-tap-highlight-color: transparent;
+    
+    /* Força o estado padrão inicial a ser transparente com transição controlada */
+    background-color: rgba(0, 0, 0, 0) !important;
+    transition: background-color 0.4s ease-out !important;
+}
+
+/* Quando o usuário clica/pressiona (Força acender na hora) */
+.setting-row.clickable-theme-row:active {
+    background-color: rgba(0, 0, 0, 0.12) !important; /* Um pouco mais escuro para dar contraste */
+    transition: background-color 0s !important;       /* Sem delay para ligar */
+}
+
+/* Ajuste de clique para o Modo Escuro (Força acender claro no fundo escuro) */
+body.dark-mode .setting-row.clickable-theme-row:active {
+    background-color: rgba(255, 255, 255, 0.22) !important; /* Mais brilho para o modo escuro */
+    transition: background-color 0s !important;
+}
+
+
+/* Efeito visual sutil ao passar o mouse na linha */
+.setting-row.clickable-theme-row:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+body.dark-mode .setting-row.clickable-theme-row:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
 
 .btn-toggle-theme-circle { 
     width: 44px; 
