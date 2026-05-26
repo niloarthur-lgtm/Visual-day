@@ -2,15 +2,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // MAPA LOCAL DE ÍCONES (Pasta img/icons/)
     const iconPaths = {
-        delete: "./img/icons/delete.svg", 
-        settings: "./img/icons/settings.svg",
-        close: "./img/icons/close.svg",
-        darkMode: "./img/icons/dark_mode.svg",
-        lightMode: "./img/icons/light_mode.svg",
-        edit: "./img/icons/edit.svg",
-        add: "./img/icons/add.svg",
-        home: "./img/icons/home.svg",
-        checkBox: "./img/icons/check_box.svg"
+    const iconPaths = {
+        delete: "../img/icons/delete.svg", 
+        settings: "../img/icons/settings.svg",
+        close: "../img/icons/close.svg",
+        darkMode: "../img/icons/dark_mode.svg",
+        lightMode: "../img/icons/light_mode.svg",
+        edit: "../img/icons/edit.svg",
+        add: "../img/icons/add.svg",
+        home: "../img/icons/home.svg",
+        checkBox: "../img/icons/check_box.svg"
     };
 
     // DICIONÁRIO DE TRADUÇÃO
