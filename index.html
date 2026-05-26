@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciador de Tempo 24h</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css"/>
     <script src="js/script.js" defer></script>
 </head>
 <body>
 
 <button class="btn-settings-floating" id="btnOpenSettings" title="Configurações">
-    <span class="material-icons">settings</span>
+    <img src="img/icons/settings.svg" alt="Configurações" class="app-icon">
 </button>
 
 <header id="appHeader">
@@ -29,13 +28,12 @@
                 <div class="error-msg" id="mainErrorMsg"></div>
             </div>
 
-            <div class="legend-panel" id="legendPanel">
-                </div>
+            <div class="legend-panel" id="legendPanel"></div>
         </div>
     </div>
     
     <button class="btn-main-floating-action" id="btnOpenEdit" title="Editar Tarefas">
-        <span class="material-icons">edit</span>
+        <img src="img/icons/edit.svg" alt="Editar" class="app-icon src-white">
     </button>
 </div>
 
@@ -44,22 +42,21 @@
         <div class="todo-header">
             <h2 id="txtTodoTitle">Tarefas</h2>
         </div>
-        <div class="todo-list" id="todoListPanel">
-            </div>
+        <div class="todo-list" id="todoListPanel"></div>
     </div>
 
     <button class="btn-main-floating-action" id="btnAddTodoItem" title="Adicionar To-Do">
-        <span class="material-icons">add</span>
+        <img src="img/icons/add.svg" alt="Adicionar" class="app-icon src-white">
     </button>
 </div>
 
 <nav class="bottom-nav">
     <button class="nav-item active" id="navBtnInicio">
-        <span class="material-icons">home</span>
+        <img src="img/icons/home.svg" alt="Início" class="app-icon nav-icon-color">
         <span class="nav-label" id="lblNavInicio">Início</span>
     </button>
     <button class="nav-item" id="navBtnTodos">
-        <span class="material-icons">check_box</span>
+        <img src="img/icons/check_box.svg" alt="To-Dos" class="app-icon nav-icon-color">
         <span class="nav-label" id="lblNavTodos">To-Dos</span>
     </button>
 </nav>
@@ -74,8 +71,7 @@
         
         <h2 id="txtEditTitle">Editar Atividades</h2>
         
-        <div class="inputs-panel" id="inputsPanel">
-            </div>
+        <div class="inputs-panel" id="inputsPanel"></div>
 
         <button class="btn-add-task" id="btnAddTaskHours">+ Adicionar Tarefa</button>
     </div>
@@ -86,44 +82,33 @@
         <div class="side-panel-header">
             <h2 id="txtSettingsTitle">Configurações</h2>
             <button class="btn-close-side" id="btnCloseSettings">
-                <span class="material-icons">close</span>
+                <img src="img/icons/close.svg" alt="Fechar" class="app-icon">
             </button>
         </div>
         
         <div class="settings-panel">
             <div class="setting-section">
                 <h3 id="txtSectionAppearance">Aparência</h3>
-                <div class="setting-row">
-                    <button class="btn-toggle-theme-circle" id="btnToggleTheme">
-                        <span class="material-icons" id="themeIcon">dark_mode</span>
-                    </button>
-                    <span class="theme-label" id="themeLabel">Modo Escuro</span>
-                </div>
+               <div class="setting-row">
+    <button class="btn-toggle-theme-circle" id="btnToggleTheme">
+        <img src="img/icons/dark_mode.svg" id="themeIcon" alt="Tema" class="app-icon src-dark-toggle">
+    </button>
+    <span class="theme-label" id="themeLabel">Modo Escuro</span>
+</div>
+
             </div>
 
             <div class="setting-section">
-                <h3>Idioma / Language</h3>
-                <div class="language-list">
-                    <label class="language-option">
-                        <input type="radio" name="appLanguage" value="pt">
-                        <span class="custom-radio"></span>
-                        <span class="language-name">Português</span>
-                    </label>
-                    <label class="language-option">
-                        <input type="radio" name="appLanguage" value="en">
-                        <span class="custom-radio"></span>
-                        <span class="language-name">English</span>
-                    </label>
-                    <label class="language-option">
-                        <input type="radio" name="appLanguage" value="es">
-                        <span class="custom-radio"></span>
-                        <span class="language-name">Español</span>
-                    </label>
-                    <label class="language-option">
-                        <input type="radio" name="appLanguage" value="zh">
-                        <span class="custom-radio"></span>
-                        <span class="language-name">简体中文</span>
-                    </label>
+                <h3 id="txtSectionLanguage">Idioma / Language</h3>
+                <div class="select-container">
+                    <select id="appLanguageSelect" class="app-select">
+                        <option value="pt">Português</option>
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="zh">简体中文</option>
+                        <option value="ja">日本語</option>
+                        <option value="ko">한국어</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -132,3 +117,4 @@
 
 </body>
 </html>
+
