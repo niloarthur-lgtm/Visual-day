@@ -24,7 +24,7 @@
                 <div class="canvas-container">
                     <canvas id="chartCanvas" width="320" height="320"></canvas>
                 </div>
-                <div class="hours-counter" id="mainHoursCounter">Total: 0 / 24h</div>
+                <div class="hours-counter" id="mainHoursCounter">Total: 0h 00m / 24h</div>
                 <div class="error-msg" id="mainErrorMsg"></div>
             </div>
 
@@ -72,6 +72,7 @@
         <h2 id="txtEditTitle">Editar Atividades</h2>
         
         <div class="inputs-panel" id="inputsPanel"></div>
+        <div class="static-panel-footer" id="staticInputsPanel"></div>
 
         <button class="btn-add-task" id="btnAddTaskHours">+ Adicionar Tarefa</button>
     </div>
@@ -89,13 +90,12 @@
         <div class="settings-panel">
             <div class="setting-section">
                 <h3 id="txtSectionAppearance">Aparência</h3>
-               <div class="setting-row">
-    <button class="btn-toggle-theme-circle" id="btnToggleTheme">
-        <img src="img/icons/dark_mode.svg" id="themeIcon" alt="Tema" class="app-icon src-dark-toggle">
-    </button>
-    <span class="theme-label" id="themeLabel">Modo Escuro</span>
-</div>
-
+                <div class="setting-row">
+                    <button class="btn-toggle-theme-circle" id="btnToggleTheme">
+                        <img src="img/icons/dark_mode.svg" id="themeIcon" alt="Tema" class="app-icon src-dark-toggle">
+                    </button>
+                    <span class="theme-label" id="themeLabel">Modo Escuro</span>
+                </div>
             </div>
 
             <div class="setting-section">
@@ -117,4 +117,3 @@
 
 </body>
 </html>
-
