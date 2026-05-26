@@ -6,6 +6,13 @@
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
+/* VARIÁVEIS DE TEMA DINÂMICAS PARA OS CARDS DO EDITOR */
+:root {
+    --card-bg: #2c3e50;
+    --card-text: #ffffff;
+    --editor-border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
 body {
     background-color: #f4f7f6;
     color: #333;
@@ -18,10 +25,17 @@ body {
     overflow-x: hidden;
 }
 
-/* VARIÁVEIS E REGRAS DO MODO ESCURO */
+/* TRAVA DE SEGURANÇA PARA BLOQUEAR SCROLL DO BODY */
+body.modal-open {
+    overflow: hidden !important;
+    touch-action: none;
+}
+
 body.dark-mode {
     background-color: #1a1a1a;
     color: #f4f7f6;
+    --card-bg: #1e293b;
+    --editor-border-top: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 body.dark-mode .container,
@@ -40,7 +54,6 @@ body.dark-mode .side-panel-content {
     color: #fff;
 }
 
-body.dark-mode .task-row, 
 body.dark-mode .todo-item {
     background: #333;
 }
@@ -49,25 +62,35 @@ body.dark-mode .todo-item input[type="text"] {
     color: #fff;
 }
 
-/* ==========================================================================
-   AJUSTE DO INPUT DE TEXTO DENTRO DO TO-DO
-   ========================================================================== */
-
 .todo-item input[type="text"] {
-    flex: 1;             /* Faz o input ocupar o espaço ideal da linha */
-    width: 100%;         /* Garante que ele use a base do flexbox */
-    margin-right: 12px;  /* Cria o recuo perfeito antes do botão de excluir */
+    flex: 2;             
+    width: 100%;         
+    margin-right: 12px;  
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: transparent;
-    color: inherit;      /* Herda a cor do texto do tema atual */
+    color: inherit;      
 }
 
-/* Ajuste opcional para quando o input estiver em foco (clicado) */
+.todo-class-select {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: transparent;
+    color: inherit;
+    margin-right: 8px;
+}
+
+body.dark-mode .todo-class-select option {
+    background-color: #262626;
+    color: #fff;
+}
+
 .todo-item input[type="text"]:focus {
     outline: none;
-    border-color: #007bff; /* Destaca a borda em azul ao digitar */
+    border-color: #007bff; 
 }
 
 body.dark-mode .bottom-sheet-content h2,
@@ -76,10 +99,6 @@ body.dark-mode .side-panel-content h2 {
 }
 
 body.dark-mode .side-panel-content h3 {
-    color: #bbb;
-}
-
-body.dark-mode .hour-display {
     color: #bbb;
 }
 
@@ -249,7 +268,7 @@ body.dark-mode .todo-header { border-color: #444; }
     opacity: 0.5;
 }
 
-.btn-delete-todo, .btn-delete-task {
+.btn-delete-todo {
     background: transparent;
     border: none;
     cursor: pointer;
@@ -382,10 +401,12 @@ canvas {
     background-color: rgba(0,0,0,0.4);
 }
 
+/* MODIFICAÇÃO: TETO CRÍTICO DE LARGURA E ALTURA DO BANNER EDITAR (MÁXIMO 60VH) */
 .bottom-sheet-content {
     background-color: white;
     width: 100%; 
     max-width: 500px; 
+    max-height: 60vh; /* Não cobre mais o gráfico */
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     padding: 10px 20px 25px 20px;
@@ -393,6 +414,8 @@ canvas {
     transform: translateY(100%); 
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
+    display: flex;
+    flex-direction: column;
 }
 
 .drag-handle-container {
@@ -402,30 +425,143 @@ canvas {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .drag-handle { width: 50px; height: 4px; background-color: #ccc; border-radius: 2px; }
-.sheet-error-msg { color: #dc3545; font-weight: bold; font-size: 0.9rem; text-align: center; min-height: 22px; margin-bottom: 2px; }
-.inputs-panel { display: flex; flex-direction: column; gap: 10px; max-height: 40vh; overflow-y: auto; padding-right: 2px; margin-bottom: 15px; }
 
+.sheet-error-msg { color: #dc3545; font-weight: bold; font-size: 0.95rem; text-align: center; min-height: 22px; margin-bottom: 2px; transition: all 0.2s ease; flex-shrink: 0; }
+.flash-warn { animation: shake 0.3s ease-in-out; }
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
+/* MODIFICAÇÃO: INPUTS PANEL EXPANSÍVEL FLEXÍVEL COM SCROLL INTERNO INTEGRADO */
+.inputs-panel { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+    flex: 1;
+    overflow-y: auto; 
+    padding-right: 4px; 
+    margin-bottom: 15px; 
+}
+
+/* MODIFICAÇÃO: BORDAS SUPERIORES ADAPTATIVAS INTEGRADAS SEM USAR HR */
+.static-panel-footer-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: transparent !important;
+    padding: 10px 0 0 0 !important;
+    border-top: var(--editor-border-top); /* Substitui o <hr> nativamente */
+    margin-top: 5px;
+}
+
+/* CARDS DINÂMICOS DA LISTA */
 .task-row {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    background: #fafafa;
+    flex-direction: column;
+    background-color: var(--card-bg);
     padding: 10px;
     border-radius: 6px;
     border-left: 5px solid #ccc;
+    color: var(--card-text);
+    min-height: 58px; 
+    justify-content: center;
+    flex-shrink: 0; /* Previne achatamentos indesejados */
 }
 
-.task-row input[type="text"] { flex: 1; min-width: 80px; padding: 5px 0; border: none; background: transparent; outline: none; font-size: 0.95rem; font-weight: bold; }
-.task-row input[readonly] { cursor: default; user-select: none; }
-.task-row .range-container { display: flex; align-items: center; gap: 10px; flex: 2; min-width: 140px; }
-.task-row input[type="range"] { flex: 1; accent-color: currentColor; cursor: pointer; }
-.task-row .hour-display { font-size: 0.85rem; font-weight: 600; color: #444; min-width: 45px; text-align: right; margin-right: 4px; }
+.main-row-control {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 12px;
+    height: 38px; 
+}
 
-.btn-add-task { width: 100%; background-color: #007bff; color: white; border: none; padding: 12px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; }
+/* MODIFICAÇÃO: REORGANIZAÇÃO COMPLETA DE SEGURANÇA NA SUB-DIV DE EDIÇÃO */
+.sub-edit-panel {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(255,255,255,0.15);
+    justify-content: space-between; /* Espaçamento total entre as extremidades */
+}
+
+/* MODIFICAÇÃO: BOTÕES DE MAIS E MENOS COM HOVER SEGURO */
+.stepper-controls {
+    display: flex;
+    gap: 10px;
+    margin-left: auto; /* Garante alinhamento total na extrema direita */
+}
+.btn-step {
+    width: 38px;
+    height: 36px;
+    border-radius: 6px;
+    border: none;
+    background-color: #4a5568;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+/* EFEITO HOVER E ACTIVE PEDIDO QUE ESCURECE O BOTÃO DE AJUSTE */
+.btn-step:hover {
+    background-color: #2d3748; 
+}
+.btn-step:active { 
+    background-color: #1a202c; 
+}
+
+.task-row input[type="text"] { flex: 1; min-width: 80px; padding: 5px 0; border: none; background: transparent; outline: none; font-size: 0.95rem; font-weight: bold; color: #fff; }
+.task-row input[readonly] { cursor: default; user-select: none; }
+
+.task-row .range-container { display: flex; align-items: center; gap: 8px; flex: 1.8; min-width: 130px; }
+
+.read-only-range {
+    width: 55px; 
+    flex: none;
+    pointer-events: none; 
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+}
+.read-only-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 0; height: 0; }
+.read-only-range::-moz-range-thumb { width: 0; height: 0; border: 0; }
+
+.task-row .hour-display { font-size: 0.85rem; font-weight: 600; color: #fff; min-width: 68px; text-align: right; }
+.automatic-label { font-size:0.8rem; opacity:0.6; font-style:italic; margin-right:10px; color: #fff; }
+
+.btn-add-task { width: 100%; background-color: #007bff; color: white; border: none; padding: 12px; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; flex-shrink: 0; }
 .btn-add-task:hover { background-color: #0056b3; }
+
+.btn-edit-action {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    background-color: #007bff !important;
+    border: none !important;
+    border-radius: 6px !important;       
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+}
+.btn-edit-action.active-btn {
+    background-color: #0056b3 !important;
+}
 
 .side-panel-overlay {
     position: fixed;
@@ -465,7 +601,6 @@ body.dark-mode .side-panel-header { border-color: #444; }
 .setting-section h3 { font-size: 0.9rem; color: #7f8c8d; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px; }
 .setting-row { display: flex; align-items: center; gap: 15px; }
 
-/* Botão de alternar tema em formato circular limpo */
 .btn-toggle-theme-circle { 
     width: 44px; 
     height: 44px; 
@@ -485,10 +620,7 @@ body.dark-mode .btn-toggle-theme-circle {
 
 .theme-label { font-size: 1rem; font-weight: 600; }
 
-.select-container {
-    width: 100%;
-    position: relative;
-}
+.select-container { width: 100%; position: relative; }
 
 .app-select {
     width: 100%;
@@ -517,11 +649,6 @@ body.dark-mode .app-select {
     .content { flex-direction: column; gap: 20px; }
 }
 
-/* ==========================================================================
-   BARRA DE NAVEGAÇÃO (ÍCONE SELECIONADO)
-   ========================================================================== */
-
-/* Garante que o link da nav seja um container posicionado */
 .nav-link {
     position: relative;
     display: flex;
@@ -532,42 +659,33 @@ body.dark-mode .app-select {
     transition: all 0.3s ease;
 }
 
-/* O Retângulo Acinzentado com bordas arredondadas EM CIMA do selecionado */
 .nav-link.active {
-    background-color: #e0e0e0; /* Cinza claro para o modo claro */
-    border-radius: 8px;        /* Bordas arredondadas do retângulo */
+    background-color: #e0e0e0; 
+    border-radius: 8px;        
 }
 
-/* Ajuste do retângulo cinza quando o site estiver no Modo Escuro */
 body.dark-mode .nav-link.active {
-    background-color: #3a3a3a; /* Cinza mais escuro no modo dark */
+    background-color: #3a3a3a; 
 }
 
-/* Quando selecionado, o ícone dentro dele vira BRANCO */
 .nav-link.active .nav-icon {
     background-color: #ffffff !important;
 }
 
-/* ==========================================================================
-   SISTEMA DE MÁSCARAS PARA ÍCONES (CONTROLE DE COR E CONTRASTE)
-   ========================================================================== */
-
-/* Transforma as tags <img> dos ícones em máscaras injetáveis de cor */
 .app-icon {
     display: inline-block;
     width: 24px;
     height: 24px;
-    background-color: #212121; /* Escurece os ícones por padrão no Modo Claro */
+    background-color: #212121; 
     -webkit-mask-size: contain;
     mask-size: contain;
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
     -webkit-mask-position: center;
     mask-position: center;
-    object-position: -9999px; /* Oculta a imagem original do src para usar a máscara */
+    object-position: -9999px; 
 }
 
-/* Mapeamento dos arquivos SVG para os moldes das máscaras */
 img[src*="home.svg"] { -webkit-mask-image: url("../img/icons/home.svg"); mask-image: url("../img/icons/home.svg"); }
 img[src*="check_box.svg"] { -webkit-mask-image: url("../img/icons/check_box.svg"); mask-image: url("../img/icons/check_box.svg"); }
 img[src*="close.svg"] { -webkit-mask-image: url("../img/icons/close.svg"); mask-image: url("../img/icons/close.svg"); }
@@ -578,39 +696,29 @@ img[src*="add.svg"] { -webkit-mask-image: url("../img/icons/add.svg"); mask-imag
 img[src*="dark_mode.svg"] { -webkit-mask-image: url("../img/icons/dark_mode.svg"); mask-image: url("../img/icons/dark_mode.svg"); }
 img[src*="light_mode.svg"] { -webkit-mask-image: url("../img/icons/light_mode.svg"); mask-image: url("../img/icons/light_mode.svg"); }
 
-/* Quando o site estiver no MODO ESCURO, os ícones gerais passam a ser brancos */
 body.dark-mode .app-icon {
     background-color: #ffffff;
 }
 
-/* Ícones flutuantes de ação (Adicionar e Editar) permanecem brancos em ambos os modos */
 .src-white {
     background-color: #ffffff !important;
 }
-
-/* ==========================================================================
-   BARRA DE NAVEGAÇÃO (BOTÃO SELECIONADO AZUL)
-   ========================================================================== */
 
 .nav-item {
     position: relative;
     transition: all 0.3s ease;
 }
 
-/* Retângulo azul com bordas arredondadas EM CIMA do ícone selecionado */
 .nav-item.active .app-icon {
-    background-color: #007bff !important; /* Deixa o Ícone Azul */
+    background-color: #007bff !important; 
     background-image: none;
 }
 
-/* ==========================================================================
-   CORREÇÃO DO BOTÃO DE EXCLUIR (TRAVAR TAMANHO QUADRADO)
-   ========================================================================== */
-
+/* MODIFICAÇÃO: BOTÃO EXCLUIR POSICIONADO À ESQUERDA SEM RISCO DE CLIQUES INVOLUNTÁRIOS */
 .btn-delete-todo, .btn-delete-task {
     width: 36px !important;
     height: 36px !important;
-    flex-shrink: 0 !important; /* IMPEDE O FLEXBOX DE ESMAGAR O BOTÃO AO CLICAR */
+    flex-shrink: 0 !important; 
     background-color: #d32f2f !important; 
     border: none !important;
     border-radius: 6px !important;       
@@ -619,25 +727,17 @@ body.dark-mode .app-icon {
     justify-content: center;
     cursor: pointer;
     padding: 0;
+    margin-right: auto; /* Alinha o botão de lixeira totalmente na extrema esquerda */
 }
 
-/* Garante o contraste forçando o ícone interno da lixeira a ficar BRANCO */
 .btn-delete-todo .app-icon, .btn-delete-task .app-icon {
     background-color: #ffffff !important;
 }
 
-/* ==========================================================================
-   BOTÃO DE ALTERNAR TEMA (ÍCONES COM A COR DO BODY ATUAL)
-   ========================================================================== */
-
-/* No Modo Claro: Força o ícone da LUA a ter a cor de fundo do Body Claro */
 .btn-toggle-theme-circle #themeIcon {
     background-color: var(--bg-claro, #ffffff) !important; 
-    /* Caso você não use variáveis, mude o #ffffff para a cor exata do fundo do seu modo claro */
 }
 
-/* No Modo Escuro: Força o ícone do SOL a ter a cor de fundo do Body Escuro */
 body.dark-mode .btn-toggle-theme-circle #themeIcon {
     background-color: var(--bg-escuro, #1a202c) !important;
-    /* Caso você não use variáveis, mude o #1a202c para a cor exata do fundo do seu modo escuro */
 }
