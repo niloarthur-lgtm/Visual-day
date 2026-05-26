@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // MAPA LOCAL DE ÍCONES (Pasta img/icons/)
     const iconPaths = {
-    const iconPaths = {
         delete: "../img/icons/delete.svg", 
         settings: "../img/icons/settings.svg",
         close: "../img/icons/close.svg",
